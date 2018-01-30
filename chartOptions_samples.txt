@@ -1,0 +1,13 @@
+
+// Change position of legend
+{title: { display: true, position: 'left', text: 'Custom Chart Title' }}
+
+// reset x & y axis scale to zero
+{scales:{yAxes:[{ticks: { beginAtZero: true } }] } }
+
+{scales: {yAxes: [{ ticks: { beginAtZero: true } }], xAxes: [{ ticks: { beginAtZero: true }}] }}
+
+{legend: { display: true, position: 'bottom', labels: {fontColor: 'rgb(255, 99, 132)' } }}
+
+// Options to zero out x-axis/y-axis, add scale labels to 'x and y-axis' and change font-size on scale labels
+{scales: {xAxes: [{ticks: {beginAtZero: true}, scaleLabel: {display: true,labelString: 'x-axis info here', fontSize: 26}}], yAxes: [{ticks: {beginAtZero: true }, scaleLabel: {display: true, labelString: 'y-axis info here',fontSize: '26' } }]}}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include ./partials/head.ejs %>
+</head>
+
+<body>
+    <div id="mySidenav" class="sidenav">
+        <a class="closebtn">Close</a>
+        <p class="p_help">Express Chart Maker is here to help you make charts.</p>
+        <p class="p_help"> With this simple web app you can make beautiful charts easily.</p>
+        <p class="p_help">To get started input your chart data into the form fields to the right. If you have multiple datasets to graph then
+            you should separate your sets with a "/" (i.e. apples / oranges in Chart Label and 12,14,5,34 / 22,33,8,22 into
+            the Chart Data field.) You then can render the chart.
+        </p>
+        <p class="p_help"> To do more indepth charts you can take a look at the documentation at the Chart.js site. There you can read up on
+            all that Chart.js offers. Learning a little JavaScript object notation will help you in developing more powerful
+            charts. You can go their site at:
+        </p>
+        <a href="http://www.chartjs.org/docs/latest/getting-started/" target="_blank">Chart.js Documentation</a>
+    </div>
+
+    <!-- Use any element to open the sidenav -->
+    <span class="open_help">More</span>
+    <div id="main">
+        <h1>
+            <%= title %>
+        </h1>
+        <p>Chart making the easy way</p>
+
+        <img src="/img/chart.png" id="chart_image" alt="color pie chart photo">
+        <canvas class="hidden" id="myChart" width="300" height="300"></canvas>
+
+        <!-- Chart Input Form -->
+        <!-- We dont want chart_type as part of form when we use serializeArray
+        gather the data and use in chartData object -->
+        <div class="container-fluid">
+            <!-- Print Button -->
+            <div class="row">
+                <div class="col-md-4 col-md-offset-5">
+                    <button class="btn btn-primary btn-lg hidden" id="print_chart">Print Chart</button>
+                </div>
+            </div>
+
+            <h2>Input Your Chart Values:</h2>
+
+            <!-- ====================== Form Markup ====================================== -->
+            <form id="form" role="form">
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4 ">
+                        <div class="form-group required">
+                            <label for="chart_type" class="control-label">Chart Type</label>
+                            <select class="form-control" id="chart_type">
+                                <option value="bar">Bar Chart</option>
+                                <option value="pie">Pie Chart</option>
+                                <option value="line">Line Chart</option>
+                                <option value="bubble">Bubble Chart</option>
+                                <option value="doughnut">Doughnut</option>
+                                <option value="polarArea">Polar Area Chart</option>
+                                <option value="radar">Radar Chart</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4">
+                        <div class="form-group has-feedback required">
+                            <label for="chart_Label" class="control-label">Chart Label(s)</label>
+                            <input type="text" name="label" class="form-control" minlength="3" id="chart_Label" placeholder="Chart Label" data-error="Chart Label is required. Min 3 characters"
+                                required>
+                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-4">
+                        <div class="form-group">
+                            <label for="chart_labels">Chart Labels</label>
+                            <input type="text" name="labels" class="form-control" id="chart_labels" placeholder="i.e. 1st Qtr, 2nd Qtr, 3rd Qtr, 4th Qtr (Comma delimited)">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-4">
+                        <div class="form-group has-feedback required">
+                            <label for="chart_data" class="control-label">Chart Data Set(s)</label>
+                            <input type="text" name="data" class="form-control" id="chart_data" placeholder="i.e. 25, 44, 60 (Comma delimited)" data-error="A Dataset is required. Seperate datasets with a '/'"
+                                required>
+                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-4">
+                        <div class="form-group">
+                            <label for="chart_colors">Background Chart Color(s)</label>
+                            <input type="text" name="backgroundColor" class="form-control " id="chart_colors" placeholder="i.e. red, rgba(12,33,125,.6), or #3cef55)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============ More Options Markup ================================== -->
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#more_options" aria-expanded="false" aria-controls="collapseExample">
+                    More Options
+                    <i class="glyphicon glyphicon-menu-down more_options" aria-hidden="true"></i>
+                </button>
+
+                <button class="btn btn-primary" type="button" data-toggle="collapse" id="clear_form">
+                    Clear Form
+                    <i class="glyphicon glyphicon-erase" aria-hidden="true"></i>
+                </button>
+
+                <div class="collapse" id="more_options">
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-xs-5 col-xs-offset-3">
+                                <div class="form-group">
+                                    <label for="border_color">Border Chart Color(s)</label>
+                                    <input type="text" name="borderColor" class="form-control" id="border_color" placeholder="i.e. red, rgba(12,33,125,.6), or #f34536">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-2 col-xs-offset-3 ">
+                                <div class="form-group ">
+                                    <label for="border_width ">Border Width(s)</label>
+                                    <input type="text " name="borderWidth" class="form-control" id="border_width" placeholder="3">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-3 col-xs-offset-1">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="yaxis_zero" name="yAxisZero">
+                                        <label for="yaxis_zero">Zero Y-axis scale</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-4 col-xs-offset-2">
+                                <div class="form-group">
+                                    <label for="chart_title">Chart Title</label>
+                                    <input type="text" name="chartAxisTitle" class="form-control" id="chart_title" placeholder="My Chart">
+                                </div>
+                            </div>
+
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <label for="fontsize_title">Font Size</label>
+                                    <input type="text" name="titleFont" class="form-control" id="fontsize_title" placeholder="i.e. 16">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-4 col-xs-offset-3">
+                                <div class="form-group ">
+                                    <label for="x_axis_label">Label for X-axis</label>
+                                    <input type="text" name="xAxisLabel" class="form-control" id="x_axis_label" placeholder="X-axis label">
+                                </div>
+                            </div>
+
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <label for="fontsize_x">Font Size</label>
+                                    <input type="text" name="xAxisFont" class="form-control" id="fontsize_x" placeholder="i.e. 16">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-4 col-xs-offset-3">
+                                <div class="form-group">
+                                    <label for="y_axis_label">Label for Y-axis</label>
+                                    <input type="text" name="yAxisLabel" class="form-control" id="y_axis_label" placeholder="Y-axis Label">
+                                </div>
+                            </div>
+
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <label for="fontsize_y">Font Size</label>
+                                    <input type="text" name="yAxisFont" class="form-control" id="fontsize_y" placeholder="i.e. 16">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Options Markup -->
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-4">
+                                <div class="form-group">
+                                    <label for="chart_options">Chart Options</label>
+                                    <input type="text" name="options" class="form-control" id="chart_options" placeholder="{Options object here}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end more options -->
+
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-5">
+                        <button type="submit" class="btn btn-primary btn-lg" id="render_btn">
+                            <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+                            Render Graph
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+            <!--======================= End of Form Markup ============================ -->
+
+        </div>
+        <!--================= End .container ===============================================-->
+
+
+        <%- include ./partials/footer.ejs %>
+
+    </div>
+    <!-- End #main -->
+
+</body>
+
+</html>

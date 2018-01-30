@@ -1,0 +1,195 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: rgba(248, 248, 255, .6);
+}
+
+.container {
+  margin: 0 auto;
+}
+
+h1  {
+  font-family: 'Domine', serif;
+  text-align: center;
+  font-size: 5rem;
+}
+
+h2 {
+  font-family: 'Domine', serif;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+label  {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+p {
+    text-align: center;
+    font-size: 3rem;
+}
+
+a {
+  color: #00B7FF;
+}
+
+img[src="/img/chart.png"] {
+  display: block;
+  margin: 0 auto;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+/*============== Menu Stylings =========================== */
+ /* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+/* The navigation menu links */
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+span.open_help {
+  position: absolute;
+  top: 15vh;
+  left: 0;
+  padding: 3rem;
+  text-decoration: none;
+  font-size: 4rem;
+  cursor: pointer;
+  color: #4C9900;
+  background-color: rgba(82,178,62,.3);
+  border-radius: 0px 15px 15px 0;
+  transition: 0.3s;
+}
+  span.open_help:hover {
+    color: #066823;
+
+  }
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  cursor: pointer;
+  color: rgb(27, 184, 144);
+}
+    .sidenav .closebtn:hover {
+      color: rgb(117, 197, 169);
+    }
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s;
+  padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+} 
+
+@media screen and (max-width: 900px) {
+  span.open_help {
+    padding: 2rem;
+    font-size: 2.5rem;
+  }
+}
+
+a[class=closebtn] {
+  margin-bottom: 3vh;
+}
+
+.p_help + a {
+  color: rgb(158, 241, 212);
+}
+    p + a:hover {
+      color: rgb(65, 221, 169);
+    }
+
+.p_help {
+  color: rgb(195, 247, 229);
+  font-size: 2.5rem;
+}
+    p.p_help:hover {
+      color: rgb(116, 238, 197);
+    }
+
+button#print_chart {
+  margin: 2.5rem auto;
+  background-color: #005500;
+}
+    #print_chart:hover {
+      background-color: rgb(135, 216, 115);
+    }
+
+
+/* =============== Form CSS Stylings  ========================== */
+form {
+  text-align: center;
+}
+
+input.form-control {
+  font-weight: 550;
+  margin: 0 auto;
+}
+
+input[type=checkbox] {
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2.5); /* Opera */
+  transform: scale(2.5);
+  padding-right: 10px;
+}
+
+.btn-primary, .btn-primary:focus, .btn-primary:visited, .btn-primary.disabled {
+  background:  rgba(0,169,130,.9);
+}
+    .btn-primary:active, .btn-primary:invalid {
+      background: rgba(74, 124, 122, 0.4)
+    }
+    .btn-primary:hover {
+      background:   rgba(0,169,130,.5);
+    }
+
+
+#render_btn {
+  margin-top: 35px;
+}
+
+button[data-target="#more_options"], button#clear_form {
+  margin: 25px 20px;
+}
+
+.form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}
+
+
