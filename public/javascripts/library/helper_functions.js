@@ -3,7 +3,8 @@
     // =============================================================================================== //
     // ============= Function definitions below here ================================================= //
     // =============================================================================================== //
-   let helper_functions =  function splitString(strToSplit, separator = ",") {
+   let helper_functions =  
+   function splitString(strToSplit, separator = ",") {
         if (!strToSplit) {
             alert("Error: One of your required fields is empty.");
             return false;
@@ -143,4 +144,5 @@
     // ================== End Function Definitions ================================================ //
     // ============================================================================================ //
 
+window.helper_functions = helper_functions;
 module.exports = helper_functions;
