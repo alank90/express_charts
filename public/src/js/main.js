@@ -1,5 +1,6 @@
 // /public/main.js
-
+let helper = require('./library/helpers');
+// Test comment 
 $(document).ready(function () {
     // Let's declare some variables
     let counter = 0;   // Keeps track of if canvas has already been drawn
@@ -51,7 +52,7 @@ $(document).ready(function () {
                 // split the string into seperate dataset's
                 else if ((formData[index].value.indexOf('/') > -1) && !(formData[index].name.includes('Axis'))) {
                     // Split the field up into seperate array items
-                    formData[index].value = splitString(formData[index].value, '/');
+                    formData[index].value = helper.splitString(formData[index].value, '/');
 
                     // Now put the array items into their seperate chartData.datasets arrays
                     // i.e. If you had formData[index].value equal to [0] apples and [1] oranges
@@ -159,12 +160,12 @@ $(document).ready(function () {
             //  from string etc.. ==================================================================
 
             if (chartData.labels) {
-                chartData.labels = splitString(chartData.labels);
+                chartData.labels = helper.splitString(chartData.labels);
             }
 
             // We need to see if there are multiple datasets and if so, loop thru the datasets 
             // sending appropriate object values (e.g., datasets.data and datasets.borderWidth) to the
-            // splitString method.
+            // helper.splitString method.
             chartData.datasets = convertDataArrayElements(chartData.datasets);
 
 
@@ -249,7 +250,7 @@ $(document).ready(function () {
                     options: chartOptions
                 });
 
-                console.log(myChart.options);
+                // console.log(myChart.options);
 
                 counter += 1;
 
@@ -289,42 +290,7 @@ $(document).ready(function () {
     // =============================================================================================== //
     // ============= Function definitions below here ================================================= //
     // =============================================================================================== //
-    function splitString(strToSplit, separator = ",") {
-        if (!strToSplit) {
-            alert("Error: One of your required fields is empty.");
-            return false;
-        }
-
-        // Test for a ',' or '/' in the string
-        result = /[,\/]/g.test(strToSplit);
-        if (result === false) {
-            // Only one entry in Data form
-            return strToSplit;
-        }
-
-        // next test if rgba used and is in multiple datasets
-        result = /(?=.*^rgba?)(?=.*[\/])/g.test(strToSplit);
-        if (result) {
-            separator = "/";
-        } else if (/\s*,\s*(?=rgb)/.test(strToSplit)) {   // Test for consecutive ",rgb" indicating multiple rgba values
-            let pattern = /\s*,\s*(?=rgb)/; // look for comma with look ahead to an rgb
-            separator = pattern;
-        } else {
-            if (/^rgba?/g.test(strToSplit)) { // Is single rgba so return
-                return strToSplit;
-            }
-        }
-
-        // Split a string into an array and trim any whitespace
-        // and store it back
-        let arrayOfStrings = strToSplit.split(separator);
-        arrayOfStrings.forEach(function (value, index) {
-            arrayOfStrings[index] = value.trim();
-        });
-
-        return arrayOfStrings;
-    }  // ============ End spltString Function =================================================== //
-
+    
 
     // =========================================================================================== //
     // Function to convert string to an array then convert each element to a number                //
@@ -399,7 +365,7 @@ $(document).ready(function () {
                 // Check for comma separated value
                 if (dataArray[dataset_index].backgroundColor) {
                     if (/,+/.test(dataArray[dataset_index].backgroundColor)) {
-                        dataArray[dataset_index].backgroundColor = splitString(dataArray[dataset_index].backgroundColor);
+                        dataArray[dataset_index].backgroundColor = helper.splitString(dataArray[dataset_index].backgroundColor);
                     }
                 }
 
@@ -419,7 +385,7 @@ $(document).ready(function () {
 
             if (dataArray[dataset_index].backgroundColor) {
                 if (/,+/.test(dataArray[dataset_index].backgroundColor)) {
-                    dataArray[dataset_index].backgroundColor = splitString(dataArray[dataset_index].backgroundColor);
+                    dataArray[dataset_index].backgroundColor = helper.splitString(dataArray[dataset_index].backgroundColor);
                 }
             }
         }
