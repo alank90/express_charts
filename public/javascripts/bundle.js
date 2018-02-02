@@ -35,11 +35,65 @@ exports.splitString = function (strToSplit, separator = ",") {
     return arrayOfStrings;
 };  // ============ End spltString Function =================================================== //
 
+// =========================================================================================== //
+// Function to convert string to an array then convert each element to a number                //
+// =========================================================================================== //
+exports.strToNumberArray = function (str, separator = ',') {
+    if (str === undefined) {
+        alert('Error: string is empty.');
+        return false;
+    }
+    // Test for a comma in the string
+    let result = /,+/.test(str);
+    if (!result) {
+        alert(`Comma delimiter missing from ${str}`);
+        return false;
+    }
+
+    // Check for parenthesis and remove 
+    result = /^\(.*\)/.test(str);
+    if (result) {
+        str = str.slice(1, -1);
+    }
+
+    let arrayOfNumbers = str.split(separator).map(Number);
+
+    return arrayOfNumbers;
+};
+
+// ============================================================================= //
+// ========== Function convert string to integer or integer array ============== //
+// ============================================================================= //
+exports.strToNumber = function (str) {
+    // Test for a comma in the string
+    const result = /,+/.test(str);
+    if (!result) { // Just one string element to convert an integer
+        let num = + str; // unary + operation does type conversion
+        if (isNaN(num)) { // check if conversion successful
+            console.log(`Attention. Unable to convert ${str} to a number in function strToNumber`);
+            return false;
+        }
+        return num;
+    } else { // we have multiple string values to convert to an array of numbers
+        let num = str.split(',').map(Number);
+        if (isNaN(num[0])) {
+            console.log(`Attention. Unable to convert ${str} to a number`);
+            return false;
+        }
+        return num;
+    }
+};
+
+// Function remove all whitespace from string
+exports.removeWhiteSpace = function (str) {
+    str.replace(/\s+/g, '');
+    return str;
+};
 
 },{}],2:[function(require,module,exports){
 // /public/main.js
 let helper = require('./library/helpers');
-// Test comment 
+
 $(document).ready(function () {
     // Let's declare some variables
     let counter = 0;   // Keeps track of if canvas has already been drawn
@@ -103,7 +157,7 @@ $(document).ready(function () {
                         data[formData[index].name] = [];
 
                         formData[index].value.forEach(function (value, dataset_index) {
-                            bubbleDataItemArray = strToNumberArray(value);
+                            bubbleDataItemArray = helper.strToNumberArray(value);
                             bubbleDataSet = {};
                             bubbleDataSet.x = bubbleDataItemArray[0];
                             bubbleDataSet.y = bubbleDataItemArray[1];
@@ -329,77 +383,19 @@ $(document).ready(function () {
     // =============================================================================================== //
     // ============= Function definitions below here ================================================= //
     // =============================================================================================== //
-    
-
-    // =========================================================================================== //
-    // Function to convert string to an array then convert each element to a number                //
-    // =========================================================================================== //
-    function strToNumberArray(str, separator = ',') {
-        if (str === undefined) {
-            alert('Error: string is empty.');
-            return false;
-        }
-        // Test for a comma in the string
-        let result = /,+/.test(str);
-        if (!result) {
-            alert(`Comma delimiter missing from ${str}`);
-            return false;
-        }
-
-        // Check for parenthesis and remove 
-        result = /^\(.*\)/.test(str);
-        if (result) {
-            str = str.slice(1, -1);
-        }
-
-        let arrayOfNumbers = str.split(separator).map(Number);
-
-        return arrayOfNumbers;
-    }
-
-    // ============================================================================= //
-    // ========== Function convert string to integer or integer array ============== //
-    // ============================================================================= //
-    function strToNumber(str) {
-        // Test for a comma in the string
-        const result = /,+/.test(str);
-        if (!result) { // Just one string element to convert an integer
-            let num = + str; // unary + operation does type conversion
-            if (isNaN(num)) { // check if conversion successful
-                console.log(`Attention. Unable to convert ${str} to a number in function strToNumber`);
-                return false;
-            }
-            return num;
-        } else { // we have multiple string values to convert to an array of numbers
-            let num = str.split(',').map(Number);
-            if (isNaN(num[0])) {
-                console.log(`Attention. Unable to convert ${str} to a number`);
-                return false;
-            }
-            return num;
-        }
-    }
-
-    // Function remove all whitespace from string
-    function removeWhiteSpace(str) {
-        str.replace(/\s+/g, '');
-        return str;
-    }
-
-
     // Function iterates thru an array(datasets) and performs appropriate
     // actions on array object elements (e.g., borderColor: red, blue being
     // split into an array)
-    function convertDataArrayElements(dataArray) {
+    convertDataArrayElements = function (dataArray) {
         if (dataArray.length > 1) { // we have multiple datasets
             dataArray.forEach(function (value, dataset_index) {
                 // Convert chartData.datasets[].data object to an array of numbers 
                 if (dataArray[dataset_index].data) {
-                    dataArray[dataset_index].data = strToNumberArray(dataArray[dataset_index].data);
+                    dataArray[dataset_index].data = helper.strToNumberArray(dataArray[dataset_index].data);
                 }
                 // convert string to number
                 if (dataArray[dataset_index].borderWidth) {
-                    dataArray[dataset_index].borderWidth = strToNumber(dataArray[dataset_index].borderWidth);
+                    dataArray[dataset_index].borderWidth = helper.strToNumber(dataArray[dataset_index].borderWidth);
                 }
                 // Check for comma separated value
                 if (dataArray[dataset_index].backgroundColor) {
@@ -415,11 +411,11 @@ $(document).ready(function () {
 
             // Convert chartData.datasets[].data object to an array of numbers 
             if (dataArray[dataset_index].data && chartType !== 'bubble') {
-                dataArray[dataset_index].data = strToNumber(dataArray[dataset_index].data);
+                dataArray[dataset_index].data = helper.strToNumber(dataArray[dataset_index].data);
             }
 
             if (dataArray[dataset_index].borderWidth) {
-                dataArray[dataset_index].borderWidth = strToNumber(dataArray[dataset_index].borderWidth);
+                dataArray[dataset_index].borderWidth = helper.strToNumber(dataArray[dataset_index].borderWidth);
             }
 
             if (dataArray[dataset_index].backgroundColor) {
@@ -429,10 +425,14 @@ $(document).ready(function () {
             }
         }
         return dataArray;
-    }
+    };
+
+
     // ============================================================================================ //
     // ================== End Function Definitions ================================================ //
     // ============================================================================================ //
+
+
 
 }); // End .document.ready()
 },{"./library/helpers":1}]},{},[2]);

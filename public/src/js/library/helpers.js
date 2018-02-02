@@ -34,3 +34,57 @@ exports.splitString = function (strToSplit, separator = ",") {
     return arrayOfStrings;
 };  // ============ End spltString Function =================================================== //
 
+// =========================================================================================== //
+// Function to convert string to an array then convert each element to a number                //
+// =========================================================================================== //
+exports.strToNumberArray = function (str, separator = ',') {
+    if (str === undefined) {
+        alert('Error: string is empty.');
+        return false;
+    }
+    // Test for a comma in the string
+    let result = /,+/.test(str);
+    if (!result) {
+        alert(`Comma delimiter missing from ${str}`);
+        return false;
+    }
+
+    // Check for parenthesis and remove 
+    result = /^\(.*\)/.test(str);
+    if (result) {
+        str = str.slice(1, -1);
+    }
+
+    let arrayOfNumbers = str.split(separator).map(Number);
+
+    return arrayOfNumbers;
+};
+
+// ============================================================================= //
+// ========== Function convert string to integer or integer array ============== //
+// ============================================================================= //
+exports.strToNumber = function (str) {
+    // Test for a comma in the string
+    const result = /,+/.test(str);
+    if (!result) { // Just one string element to convert an integer
+        let num = + str; // unary + operation does type conversion
+        if (isNaN(num)) { // check if conversion successful
+            console.log(`Attention. Unable to convert ${str} to a number in function strToNumber`);
+            return false;
+        }
+        return num;
+    } else { // we have multiple string values to convert to an array of numbers
+        let num = str.split(',').map(Number);
+        if (isNaN(num[0])) {
+            console.log(`Attention. Unable to convert ${str} to a number`);
+            return false;
+        }
+        return num;
+    }
+};
+
+// Function remove all whitespace from string
+exports.removeWhiteSpace = function (str) {
+    str.replace(/\s+/g, '');
+    return str;
+};
