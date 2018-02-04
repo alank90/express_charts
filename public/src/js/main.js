@@ -169,7 +169,7 @@ $(document).ready(function () {
             // We need to see if there are multiple datasets and if so, loop thru the datasets 
             // sending appropriate object values (e.g., datasets.data and datasets.borderWidth) to the
             // helper.splitString method. So we call our convertDataArrayElements 
-            helper.convertDataArrayElements(chartData.datasets,chartType);
+            helper.convertDataArrayElements(chartData.datasets, chartType);
 
 
             // Now ready to draw the canvas with the chart data
@@ -214,7 +214,7 @@ $(document).ready(function () {
                 // the y-axis on a chart
                 yAxisZero(chartOptions);
 
-                 // Check to see if a chart exists to destroy
+                // Check to see if a chart exists to destroy
                 if (counter > 1) {
                     myChart.destroy();
                 }
@@ -238,7 +238,8 @@ $(document).ready(function () {
     // ================ End .on "click" Main Event Handler ============================================ //
     // ================================================================================================ //
 
-   eventHandlers();
+    // Some miscelleneous event handlers for the app.
+    eventHandlers();
 
     // ----------------------------------------------------------------------------------------------------------- //
 
