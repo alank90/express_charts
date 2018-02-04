@@ -1,4 +1,27 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = () => {
+    // ================================================================================================ //
+    // ============= Simple Clear Form Handler ======================================================== //
+    // ================================================================================================ // 
+
+    $("#clear_form").on("click", function (e) {
+        e.preventDefault();
+        $("#form")[0].reset();
+    });
+
+    // =============================================================================================== //
+    // ============================= Toggle Menu Options Chevron ===================================== //
+    // =============================================================================================== //
+    $('#more_options').on('shown.bs.collapse', function () {
+        $(".more_options").removeClass("glyphicon-menu-down").addClass("glyphicon-menu-up");
+    });
+
+    $('#more_options').on('hidden.bs.collapse', function () {
+        $(".more_options").removeClass("glyphicon-menu-up").addClass("glyphicon-menu-down");
+    });
+
+};
+},{}],2:[function(require,module,exports){
 exports.splitString = function (strToSplit, separator = ",") {
     if (!strToSplit) {
         alert("Error: One of your required fields is empty.");
@@ -90,9 +113,98 @@ exports.removeWhiteSpace = function (str) {
     return str;
 };
 
-},{}],2:[function(require,module,exports){
+// Function iterates thru an array(datasets) and performs appropriate
+// actions on array object elements (e.g., borderColor: red, blue being
+// split into an array)
+exports.convertDataArrayElements = (dataArray,chartType) => {
+    if (dataArray.length > 1) { // we have multiple datasets
+        dataArray.forEach(function (value, dataset_index) {
+            // Convert chartData.datasets[].data object to an array of numbers 
+            if (dataArray[dataset_index].data) {
+                dataArray[dataset_index].data = exports.strToNumberArray(dataArray[dataset_index].data);
+            }
+            // convert string to number
+            if (dataArray[dataset_index].borderWidth) {
+                dataArray[dataset_index].borderWidth = exports.strToNumber(dataArray[dataset_index].borderWidth);
+            }
+            // Check for comma separated value
+            if (dataArray[dataset_index].backgroundColor) {
+                if (/,+/.test(dataArray[dataset_index].backgroundColor)) {
+                    dataArray[dataset_index].backgroundColor = exports.splitString(dataArray[dataset_index].backgroundColor);
+                }
+            }
+
+        });
+
+    } else {   // there is only one dataset
+        var dataset_index = 0;
+
+        // Convert chartData.datasets[].data object to an array of numbers 
+        if (dataArray[dataset_index].data && chartType !== 'bubble') {
+            dataArray[dataset_index].data = exports.strToNumber(dataArray[dataset_index].data);
+        }
+
+        if (dataArray[dataset_index].borderWidth) {
+            dataArray[dataset_index].borderWidth = exports.strToNumber(dataArray[dataset_index].borderWidth);
+        }
+
+        if (dataArray[dataset_index].backgroundColor) {
+            if (/,+/.test(dataArray[dataset_index].backgroundColor)) {
+                dataArray[dataset_index].backgroundColor = exports.splitString(dataArray[dataset_index].backgroundColor);
+            }
+        }
+    }
+
+};
+
+
+    // ============================================================================================ //
+    // ================== End Function Definitions ================================================ //
+    // ============================================================================================ //
+
+
+},{}],3:[function(require,module,exports){
+// ===================================================================================
+// ================== Handler for Y-Axis Zero  checkbox ==============================
+// ===================================================================================
+
+module.exports = (chartOptions) => {
+    if (document.getElementById("yaxis_zero").checked) {
+        let yAxisZero = {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        };
+
+        $.extend(true, chartOptions, yAxisZero);
+    } else {
+        let yAxisZero = {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: false
+                    }
+                }]
+            }
+        };
+
+        $.extend(true, chartOptions, yAxisZero);
+
+    }
+
+};
+
+
+
+},{}],4:[function(require,module,exports){
 // /public/main.js
 let helper = require('./library/helpers');
+let yAxisZero = require('./library/yAxisZero');
+let eventHandlers = require('./library/eventHandlers');
 
 $(document).ready(function () {
     // Let's declare some variables
@@ -118,6 +230,7 @@ $(document).ready(function () {
             if (counter === 0) {
                 $("#chart_image").addClass('hidden');
                 $(".open_help").addClass('hidden');
+                $(".sub_title").addClass('hidden');
                 $("#myChart").removeClass('hidden');
                 counter += 1;
             }
@@ -258,8 +371,8 @@ $(document).ready(function () {
 
             // We need to see if there are multiple datasets and if so, loop thru the datasets 
             // sending appropriate object values (e.g., datasets.data and datasets.borderWidth) to the
-            // helper.splitString method.
-            chartData.datasets = convertDataArrayElements(chartData.datasets);
+            // helper.splitString method. So we call our convertDataArrayElements 
+            helper.convertDataArrayElements(chartData.datasets,chartType);
 
 
             // Now ready to draw the canvas with the chart data
@@ -300,39 +413,11 @@ $(document).ready(function () {
                     }
                 }
 
-                // ===================================================================================
-                // ================== Handler for Y-Axis Zero  checkbox ==============================
-                // ===================================================================================
-                if (document.getElementById("yaxis_zero").checked) {
-                    let yAxisZero = {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    };
+                // module call to handle zeroing out 
+                // the y-axis on a chart
+                yAxisZero(chartOptions);
 
-                    $.extend(true, chartOptions, yAxisZero);
-                } else {
-                    let yAxisZero = {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: false
-                                }
-                            }]
-                        }
-                    };
-
-                    $.extend(true, chartOptions, yAxisZero);
-
-                }
-
-
-
-                // Check to see if a chart exists to destroy
+                 // Check to see if a chart exists to destroy
                 if (counter > 1) {
                     myChart.destroy();
                 }
@@ -356,83 +441,9 @@ $(document).ready(function () {
     // ================ End .on "click" Main Event Handler ============================================ //
     // ================================================================================================ //
 
-
-    // ================================================================================================ //
-    // ============= Simple Clear Form Handler ======================================================== //
-    // ================================================================================================ // 
-
-    $("#clear_form").on("click", function (e) {
-        e.preventDefault();
-        $("#form")[0].reset();
-    });
-
-    // =============================================================================================== //
-    // ============================= Toggle Menu Options Chevron ===================================== //
-    // =============================================================================================== //
-    $('#more_options').on('shown.bs.collapse', function () {
-        $(".more_options").removeClass("glyphicon-menu-down").addClass("glyphicon-menu-up");
-    });
-
-    $('#more_options').on('hidden.bs.collapse', function () {
-        $(".more_options").removeClass("glyphicon-menu-up").addClass("glyphicon-menu-down");
-    });
-
+   eventHandlers();
 
     // ----------------------------------------------------------------------------------------------------------- //
 
-    // =============================================================================================== //
-    // ============= Function definitions below here ================================================= //
-    // =============================================================================================== //
-    // Function iterates thru an array(datasets) and performs appropriate
-    // actions on array object elements (e.g., borderColor: red, blue being
-    // split into an array)
-    convertDataArrayElements = function (dataArray) {
-        if (dataArray.length > 1) { // we have multiple datasets
-            dataArray.forEach(function (value, dataset_index) {
-                // Convert chartData.datasets[].data object to an array of numbers 
-                if (dataArray[dataset_index].data) {
-                    dataArray[dataset_index].data = helper.strToNumberArray(dataArray[dataset_index].data);
-                }
-                // convert string to number
-                if (dataArray[dataset_index].borderWidth) {
-                    dataArray[dataset_index].borderWidth = helper.strToNumber(dataArray[dataset_index].borderWidth);
-                }
-                // Check for comma separated value
-                if (dataArray[dataset_index].backgroundColor) {
-                    if (/,+/.test(dataArray[dataset_index].backgroundColor)) {
-                        dataArray[dataset_index].backgroundColor = helper.splitString(dataArray[dataset_index].backgroundColor);
-                    }
-                }
-
-            });
-
-        } else {   // there is only one dataset
-            var dataset_index = 0;
-
-            // Convert chartData.datasets[].data object to an array of numbers 
-            if (dataArray[dataset_index].data && chartType !== 'bubble') {
-                dataArray[dataset_index].data = helper.strToNumber(dataArray[dataset_index].data);
-            }
-
-            if (dataArray[dataset_index].borderWidth) {
-                dataArray[dataset_index].borderWidth = helper.strToNumber(dataArray[dataset_index].borderWidth);
-            }
-
-            if (dataArray[dataset_index].backgroundColor) {
-                if (/,+/.test(dataArray[dataset_index].backgroundColor)) {
-                    dataArray[dataset_index].backgroundColor = helper.splitString(dataArray[dataset_index].backgroundColor);
-                }
-            }
-        }
-        return dataArray;
-    };
-
-
-    // ============================================================================================ //
-    // ================== End Function Definitions ================================================ //
-    // ============================================================================================ //
-
-
-
 }); // End .document.ready()
-},{"./library/helpers":1}]},{},[2]);
+},{"./library/eventHandlers":1,"./library/helpers":2,"./library/yAxisZero":3}]},{},[4]);

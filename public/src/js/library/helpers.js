@@ -88,3 +88,53 @@ exports.removeWhiteSpace = function (str) {
     str.replace(/\s+/g, '');
     return str;
 };
+
+// Function iterates thru an array(datasets) and performs appropriate
+// actions on array object elements (e.g., borderColor: red, blue being
+// split into an array)
+exports.convertDataArrayElements = (dataArray,chartType) => {
+    if (dataArray.length > 1) { // we have multiple datasets
+        dataArray.forEach(function (value, dataset_index) {
+            // Convert chartData.datasets[].data object to an array of numbers 
+            if (dataArray[dataset_index].data) {
+                dataArray[dataset_index].data = exports.strToNumberArray(dataArray[dataset_index].data);
+            }
+            // convert string to number
+            if (dataArray[dataset_index].borderWidth) {
+                dataArray[dataset_index].borderWidth = exports.strToNumber(dataArray[dataset_index].borderWidth);
+            }
+            // Check for comma separated value
+            if (dataArray[dataset_index].backgroundColor) {
+                if (/,+/.test(dataArray[dataset_index].backgroundColor)) {
+                    dataArray[dataset_index].backgroundColor = exports.splitString(dataArray[dataset_index].backgroundColor);
+                }
+            }
+
+        });
+
+    } else {   // there is only one dataset
+        var dataset_index = 0;
+
+        // Convert chartData.datasets[].data object to an array of numbers 
+        if (dataArray[dataset_index].data && chartType !== 'bubble') {
+            dataArray[dataset_index].data = exports.strToNumber(dataArray[dataset_index].data);
+        }
+
+        if (dataArray[dataset_index].borderWidth) {
+            dataArray[dataset_index].borderWidth = exports.strToNumber(dataArray[dataset_index].borderWidth);
+        }
+
+        if (dataArray[dataset_index].backgroundColor) {
+            if (/,+/.test(dataArray[dataset_index].backgroundColor)) {
+                dataArray[dataset_index].backgroundColor = exports.splitString(dataArray[dataset_index].backgroundColor);
+            }
+        }
+    }
+
+};
+
+
+    // ============================================================================================ //
+    // ================== End Function Definitions ================================================ //
+    // ============================================================================================ //
+
