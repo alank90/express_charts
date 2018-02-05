@@ -225,8 +225,6 @@ $(document).ready(function () {
                     options: chartOptions
                 });
 
-                // console.log(myChart.options);
-
                 counter += 1;
 
             } catch (error) {
