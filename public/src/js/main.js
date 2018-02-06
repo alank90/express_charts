@@ -2,6 +2,8 @@
 let helper = require('./library/helpers');
 let yAxisZero = require('./library/yAxisZero');
 let eventHandlers = require('./library/eventHandlers');
+let captionControl = require('./library/captionControl');
+console.log(captionControl);
 
 $(document).ready(function () {
     // Let's declare some variables
@@ -12,7 +14,7 @@ $(document).ready(function () {
     let xOptions = {};
     let yOptions = {};
     let titleOptions = {};
-
+    
     // ============================================================================================== //
     // ========================= Main Event Handler for Express Chart Maker ========================= //
     // == This handler generates the chartData object that Chart.js will use to draw the chart======= //
@@ -35,7 +37,7 @@ $(document).ready(function () {
 
             // First grab form data off the page
             const formData = $('form').serializeArray();
-
+            
             // Get Chart Type Seperate from Form Data
             const chartTypeControl = document.getElementById("chart_type");
             chartType = chartTypeControl.options[chartTypeControl.selectedIndex].value;
@@ -225,9 +227,10 @@ $(document).ready(function () {
                     options: chartOptions
                 });
 
-                // console.log(myChart.options);
-
                 counter += 1;
+
+                captionControl(myChart);
+                
 
             } catch (error) {
                 alert(error);
