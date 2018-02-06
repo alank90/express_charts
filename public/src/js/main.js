@@ -2,8 +2,6 @@
 let helper = require('./library/helpers');
 let yAxisZero = require('./library/yAxisZero');
 let eventHandlers = require('./library/eventHandlers');
-let captionControl = require('./library/captionControl');
-console.log(captionControl);
 
 $(document).ready(function () {
     // Let's declare some variables
@@ -204,7 +202,7 @@ $(document).ready(function () {
                         $.extend(true, chartOptions, xOptions, yOptions);
                     }
 
-                    if (titleOptions) {
+                    if (!(jQuery.isEmptyObject(titleOptions))) {
                         chartOptions = Object.assign(
                             chartOptions || {},
                             titleOptions
@@ -213,8 +211,11 @@ $(document).ready(function () {
                 }
 
                 // module call to handle zeroing out 
-                // the y-axis on a chart
-                yAxisZero(chartOptions);
+                // the y-axis on a chart. Cant call if pie chart. Will cause 
+                // throw an error
+                if ((chartType !== 'pie') && (chartType !== 'doughnut')) {
+                    yAxisZero(chartOptions);
+                }
 
                 // Check to see if a chart exists to destroy
                 if (counter > 1) {

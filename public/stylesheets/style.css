@@ -57,6 +57,8 @@ img[src="/img/chart.png"] {
   background-color: #111; /* Black*/
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 60px; /* Place content 60px from the top */
+  -webkit-transition: 0.5s;
+  -o-transition: 0.5s;
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
@@ -67,6 +69,8 @@ img[src="/img/chart.png"] {
   font-size: 25px;
   color: #818181;
   display: block;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
   transition: 0.3s;
 }
 
@@ -81,6 +85,8 @@ span.open_help {
   color: #4C9900;
   background-color: rgba(82,178,62,.3);
   border-radius: 0px 15px 15px 0;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
   transition: 0.3s;
 }
   span.open_help:hover {
@@ -104,6 +110,8 @@ span.open_help {
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #main {
+  -webkit-transition: margin-left .5s;
+  -o-transition: margin-left .5s;
   transition: margin-left .5s;
   padding: 20px;
 }
@@ -160,11 +168,9 @@ input.form-control {
 }
 
 input[type=checkbox] {
-  -ms-transform: scale(2); /* IE */
-  -moz-transform: scale(2); /* FF */
-  -webkit-transform: scale(2); /* Safari and Chrome */
-  -o-transform: scale(2.5); /* Opera */
-  transform: scale(2.5);
+  -ms-transform: scale(2); /* IE */ /* FF */
+  -webkit-transform: scale(1.75); /* Safari and Chrome */ /* Opera */
+  transform: scale(1.75);
   padding-right: 10px;
 }
 
