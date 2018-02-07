@@ -19,4 +19,11 @@ module.exports = () => {
         $(".more_options").removeClass("glyphicon-menu-up").addClass("glyphicon-menu-down");
     });
 
+    // ================================================================================================== //
+    // Remove input 'require'. not necessary for bubble charts
+    let chType = $("#chart_type").val();
+    if (chType === 'bubble') {
+        $("#chart_labels").attr("required", false);
+    }
+
 };
